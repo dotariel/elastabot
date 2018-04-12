@@ -8,6 +8,7 @@ type Ack struct {
 
 func NewAck(alert string, duration string, triage *Triage) *Ack {
 	return &Ack{
+
 		Alert:    alert,
 		Duration: convertToMinutes(duration),
 		Triage:   triage,

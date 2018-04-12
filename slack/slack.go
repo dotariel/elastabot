@@ -1,10 +1,6 @@
 package slack
 
 import (
-	"errors"
-	"regexp"
-	"strings"
-
 	"github.com/dotariel/elastabot/elastabot"
 	"github.com/nlopes/slack"
 	log "github.com/sirupsen/logrus"
@@ -57,7 +53,7 @@ func (c *Client) Start() {
 }
 
 func (c *Client) handleEvent(event *slack.MessageEvent) {
-	command, err := c.parseCommand(event.Msg.Text)
+	command, err := elastabot.ParseCommand(event.Msg.Text)
 	if err != nil {
 		c.respond(err.Error())
 		return
@@ -70,42 +66,6 @@ func (c *Client) handleEvent(event *slack.MessageEvent) {
 	}
 
 	c.respond(response)
-}
-
-func (c *Client) parseCommand(cmd string) (elastabot.Command, error) {
-	re, _ := regexp.Compile(`^!(?P<command>ack|triage|help) ?(?P<alert>[^|?]+)? ?[|]?(?P<duration>[\d]+[smhdw]?)?`)
-
-	keys := re.SubexpNames()
-	vals := re.FindAllStringSubmatch(cmd, -1)
-
-	if len(vals) == 0 {
-		return nil, errors.New("unknown command")
-	}
-
-	md := map[string]string{}
-	for i, n := range vals[0] {
-		md[keys[i]] = n
-	}
-
-	hasTriage := strings.Contains(cmd, "?")
-
-	switch md["command"] {
-	case "ack":
-		var triage *elastabot.Triage
-		var alert = md["alert"]
-		var duration = md["duration"]
-
-		if hasTriage {
-			triage = &elastabot.Triage{
-				Topic:   alert,
-				Handler: nil,
-			}
-		}
-
-		return elastabot.NewAck(alert, duration, triage), nil
-	}
-
-	return nil, nil
 }
 
 func (c *Client) respond(message string) {

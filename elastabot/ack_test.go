@@ -18,6 +18,7 @@ func TestAck_Equals(t *testing.T) {
 		{input: Ack{Alert: "", Duration: 0, Triage: nil}, other: Ack{}, expected: true},
 		{input: Ack{Alert: "Foo", Duration: 0, Triage: nil}, other: Ack{Alert: "Foo"}, expected: true},
 		{input: Ack{Alert: "Foo", Duration: 10, Triage: nil}, other: Ack{Alert: "Foo", Duration: 10}, expected: true},
+		{input: Ack{Alert: "Foo", Duration: 10, Triage: nil}, other: Ack{Alert: "Foo", Duration: 0}, expected: false},
 		{input: Ack{}, other: Triage{}, expected: false},
 		{input: Ack{Alert: "Foo"}, other: Ack{Alert: "Bar"}, expected: false},
 		// {input: Ack{Alert: "Foo", Duration: 0}, other: Ack{Alert: "Foo", Duration: 1}, expected: false},
