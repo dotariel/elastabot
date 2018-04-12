@@ -1,6 +1,13 @@
 package elastabot
 
-import "strconv"
+import (
+	"strconv"
+	"strings"
+)
+
+const (
+	DefaultDuration = 0
+)
 
 type Ack struct {
 	Alert    string
@@ -10,21 +17,10 @@ type Ack struct {
 
 func NewAck(alert string, duration string, triage *Triage) *Ack {
 	return &Ack{
-
 		Alert:    alert,
 		Duration: convertToMinutes(duration),
 		Triage:   triage,
 	}
-}
-
-func (a Ack) Equals(other Command) bool {
-	if b, ok := other.(Ack); ok {
-		return a.Alert == b.Alert &&
-			a.Duration == b.Duration
-		// a.Triage.Equals(b.Triage)
-	}
-
-	return false
 }
 
 func (a Ack) Execute() (string, error) {
@@ -33,22 +29,35 @@ func (a Ack) Execute() (string, error) {
 	return "", nil
 }
 
-func convertToMinutes(d string) (minutes int) {
+func convertToMinutes(d string) int {
 	if len(d) == 0 {
-		return
+		return DefaultDuration // TODO: Return the default value
 	}
-	// if not str:
-	//   mins = defaultMins
-	// elif str.endswith('m'):
-	//   mins = int(str[:-1])
-	// elif str.endswith('h'):
-	//   mins = int(str[:-1]) * 60
-	// elif str.endswith('d'):
-	//   mins = int(str[:-1]) * 1440
-	// elif str.endswith('h'):
-	//   mins = int(str[:-1]) * 10080
-	// else:
-	//   mins = int(str)
-	number, _ := strconv.Atoi(d)
-	return number
+
+	if strings.HasSuffix(d, "m") {
+		return valueOrDefault(d[:len(d)-1], 1)
+	}
+
+	if strings.HasSuffix(d, "h") {
+		return valueOrDefault(d[:len(d)-1], 60)
+	}
+
+	if strings.HasSuffix(d, "d") {
+		return valueOrDefault(d[:len(d)-1], 60*24)
+	}
+
+	if strings.HasSuffix(d, "w") {
+		return valueOrDefault(d[:len(d)-1], 60*24*7)
+	}
+
+	return valueOrDefault(d, 1)
+}
+
+func valueOrDefault(value string, multiplier int) int {
+	n, err := strconv.Atoi(value)
+	if err != nil {
+		return DefaultDuration
+	}
+
+	return n * multiplier
 }

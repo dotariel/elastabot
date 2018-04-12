@@ -69,5 +69,4 @@ func TestParseCommand(t *testing.T) {
 		assert.Equal(t, tt.err, err)
 		assert.Equal(t, tt.expected, resp)
 	}
-
 }

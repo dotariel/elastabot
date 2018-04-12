@@ -8,7 +8,6 @@ import (
 
 type Command interface {
 	Execute() (string, error)
-	Equals(Command) bool
 }
 
 func ParseCommand(c string) (Command, error) {
