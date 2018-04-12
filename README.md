@@ -1,5 +1,7 @@
 # Elastabot
 
+[![Build Status](https://travis-ci.org/dotariel/elastabot.svg?branch=master)](https://travis-ci.org/dotariel/elastabot)
+
 Slack bot that listens for commands from Slack users to:
 
 * Acknowledge an alert created by elastalert
