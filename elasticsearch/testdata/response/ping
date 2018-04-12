@@ -1,0 +1,12 @@
+{
+  "name":"Mock server",
+  "cluster_name": "local",
+  "version": {
+    "number":"0.0.1",
+    "build_hash":"abcdefg",
+    "build_timestamp":"2018-03-22",
+    "build_snapshot":true,
+    "lucene_version":"10"
+  },
+  "tagline":"single binary, or GTFO"
+}

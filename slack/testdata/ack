@@ -1,0 +1,24 @@
+Usage: !ack [alert] [|<duration>] [?]
+Options:
+  alert     - Case-sensitive name of an alert rule, can contain spaces. Must have recently* fired. (optional)
+  duration  - Number of minutes to silence the alert, defaults to 240 minutes (optional)
+  ?         - Initiates the triage process
+
+If alert is not specified then the most recent* triggered alert will be used.
+
+*Recent time is currently set to 4320 minutes.
+
+The following examples will acknowledge the alert rule "Acme Flatline Alert":
+  !ack Acme Flatline Alert    will silence for the default duration
+  !ack Acme?                  will silence for the default duration
+  !ack Acme|10                will silence for 10 minutes
+  !ack Acme|10m               will silence for 10 minutes
+  !ack Acme |2d               will silence for 2 days
+  !ack Acme |2d ?             will silence for 2 days and triage
+
+The following examples will acknowledge the most recent triggered alert:
+  !ack                        will silence for the default duration
+  !ack ?                      will silence for the default duration
+  !ack |20                    will silence for 20 minutes
+  !ack |4h                    will silence for 4 hours
+  !ack |2w ?                  will silence for 2 weeks and triage
