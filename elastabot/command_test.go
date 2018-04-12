@@ -47,7 +47,7 @@ func TestParseCommand(t *testing.T) {
 				Alert:    "Acme",
 				Duration: 0,
 				Triage: &Triage{
-					Topic:   "",
+					Topic:   "Acme",
 					Handler: nil,
 				},
 			},
@@ -67,10 +67,7 @@ func TestParseCommand(t *testing.T) {
 	for _, tt := range testCases {
 		resp, err := ParseCommand(tt.message)
 		assert.Equal(t, tt.err, err)
-
-		// tt.expected.()
-
-		assert.ObjectsAreEqual(tt.expected, resp)
+		assert.Equal(t, tt.expected, resp)
 	}
 
 }

@@ -1,5 +1,7 @@
 package elastabot
 
+import "strconv"
+
 type Ack struct {
 	Alert    string
 	Duration int
@@ -47,5 +49,6 @@ func convertToMinutes(d string) (minutes int) {
 	//   mins = int(str[:-1]) * 10080
 	// else:
 	//   mins = int(str)
-	return 0
+	number, _ := strconv.Atoi(d)
+	return number
 }
