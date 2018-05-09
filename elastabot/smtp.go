@@ -12,6 +12,7 @@ type Smtp struct {
 	Debug          bool
 }
 
+// StartTriage sends an email to the configured endpoint
 func (smtp Smtp) StartTriage(string) error {
 	return nil
 }

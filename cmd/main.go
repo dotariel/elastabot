@@ -12,8 +12,8 @@ func main() {
 	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT)
 
-	slack := slack.New()
-	go slack.Start()
+	bot := slack.New()
+	go bot.Start()
 
 	<-stop
 }

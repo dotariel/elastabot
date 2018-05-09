@@ -1,9 +1,12 @@
 package slack
 
 import (
+	"encoding/json"
 	"testing"
 	"time"
 
+	"github.com/dotariel/elastabot/elastabot"
+	slk "github.com/nlopes/slack"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -11,6 +14,18 @@ var (
 	server = newMockServer()
 	client = newMockClient()
 )
+
+type FakeCommandParser struct{}
+
+func (p FakeCommandParser) Parse(s string) (elastabot.Command, error) {
+	return FakeCommand{}, nil
+}
+
+type FakeCommand struct{}
+
+func (c FakeCommand) Execute() (string, error) {
+	return "ok", nil
+}
 
 func TestNewClient(t *testing.T) {
 	c := New()
@@ -20,6 +35,21 @@ func TestNewClient(t *testing.T) {
 
 	go func() { c.shutdown <- true }()
 	<-c.shutdown
+}
+
+func TestHandleMessage(t *testing.T) {
+	go client.Start()
+	defer client.Stop()
+	<-client.connected
+
+	event := &slk.MessageEvent{Msg: slk.Msg{Text: "foo"}}
+	client.handleMessage(FakeCommandParser{}, event)
+
+	var msg slk.Msg
+	resp := waitForEvent(client, server, 50)
+	json.Unmarshal([]byte(resp), &msg)
+
+	assert.Equal(t, msg.Text, "ok")
 }
 
 func TestShutdown(t *testing.T) {

@@ -10,7 +10,13 @@ type Command interface {
 	Execute() (string, error)
 }
 
-func ParseCommand(c string) (Command, error) {
+type CommandParser interface {
+	Parse(string) (Command, error)
+}
+
+type SlackCommandParser struct{}
+
+func (foo SlackCommandParser) Parse(c string) (Command, error) {
 	re, _ := regexp.Compile(`^!(?P<command>ack|triage|help) ?(?P<alert>[^|?]+)? ?[|]?(?P<duration>[\d]+[smhdw]?)?`)
 
 	keys := re.SubexpNames()

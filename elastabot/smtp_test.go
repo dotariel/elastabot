@@ -4,7 +4,6 @@ import "testing"
 import "github.com/stretchr/testify/assert"
 
 func TestSmtpOptions(t *testing.T) {
-
 	smtp := Smtp{
 		Host: "foo",
 		Port: 99,

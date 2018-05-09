@@ -65,7 +65,7 @@ func TestParseCommand(t *testing.T) {
 	}
 
 	for _, tt := range testCases {
-		resp, err := ParseCommand(tt.message)
+		resp, err := SlackCommandParser{}.Parse(tt.message)
 		assert.Equal(t, tt.err, err)
 		assert.Equal(t, tt.expected, resp)
 	}
